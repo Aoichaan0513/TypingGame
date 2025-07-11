@@ -22,6 +22,7 @@ object GameManager {
     var gameTime: Int = 300
 
     fun start() {
+        state = GameState.READY
         scheduledFuture = Main.scheduledExecutorService.scheduleAtFixedRate(
             {
                 when (state) {

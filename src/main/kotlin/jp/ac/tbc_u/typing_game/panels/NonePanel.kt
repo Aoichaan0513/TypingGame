@@ -9,9 +9,6 @@ import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.KeyEvent
 import javax.swing.*
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 class NonePanel : GamePanel {
 
@@ -98,7 +95,6 @@ class NonePanel : GamePanel {
                             addActionListener {
                                 GameManager.readyTime = readyTimeMap[readyTimeComboBox.selectedItem as String]!!
                                 GameManager.gameTime = gameTimeMap[gameTimeComboBox.selectedItem as String]!!
-                                GameManager.state = GameManager.GameState.READY
 
                                 window.content = ReadyPanel(
                                     window,
@@ -218,7 +214,6 @@ class NonePanel : GamePanel {
             actionMap.put(this, object : AbstractAction() {
 
                 override fun actionPerformed(e: ActionEvent) {
-                    println("NonePanel: Space key pressed, starting game...")
                     startButton.doClick()
                 }
             })

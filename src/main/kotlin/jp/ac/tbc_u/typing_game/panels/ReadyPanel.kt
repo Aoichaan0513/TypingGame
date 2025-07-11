@@ -77,6 +77,8 @@ class ReadyPanel : GamePanel {
                             JButton("キャンセル").apply {
                                 size = preferredSize
                                 font = Main.serifFont.deriveFont(48f)
+
+                                addActionListener { GameManager.end() }
                             }
                         )
 
