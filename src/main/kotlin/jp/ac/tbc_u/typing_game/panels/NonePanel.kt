@@ -93,6 +93,7 @@ class NonePanel : GamePanel {
                             foreground = Color.WHITE
 
                             addActionListener {
+                                GameManager.isShuffled = wordOrderButton.isSelected
                                 GameManager.readyTime = readyTimeMap[readyTimeComboBox.selectedItem as String]!!
                                 GameManager.gameTime = gameTimeMap[gameTimeComboBox.selectedItem as String]!!
 

@@ -18,6 +18,7 @@ object GameManager {
                 return
         }
 
+    var isShuffled = true
     var readyTime: Int = 3
     var gameTime: Int = 300
 
@@ -72,6 +73,7 @@ object GameManager {
 
     fun end() {
         scheduledFuture.cancel(true)
+        isShuffled = true
         readyTime = 3
         gameTime = 300
         state = GameState.NONE

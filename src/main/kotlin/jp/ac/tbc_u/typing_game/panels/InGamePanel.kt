@@ -25,7 +25,11 @@ class InGamePanel : GamePanel, KeyListener {
 
     constructor(window: GameWindow, words: Words) : super(window) {
         this.words = words
-        result = GameResult.of(words.words)
+        result = GameResult.of(
+            words.words.let {
+                if (GameManager.isShuffled) it.toList().shuffled().toTypedArray() else it
+            }
+        )
 
         layout = BorderLayout()
         add(headerPanel(), BorderLayout.NORTH)
