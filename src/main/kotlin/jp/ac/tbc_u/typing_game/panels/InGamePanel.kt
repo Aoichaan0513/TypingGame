@@ -40,9 +40,6 @@ class InGamePanel : GamePanel, KeyListener {
 
         addKeyListener(this)
         registerKey()
-
-        requestFocusInWindow()
-        SwingUtilities.invokeLater { requestFocusInWindow() }
     }
 
     override fun update() {

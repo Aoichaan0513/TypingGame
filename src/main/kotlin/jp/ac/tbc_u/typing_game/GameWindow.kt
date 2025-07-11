@@ -13,11 +13,14 @@ class GameWindow : JFrame {
             field = value
 
             contentPane.removeAll()
-            contentPane.add(value)
+            contentPane.add(field)
+            contentPane.revalidate()
             contentPane.repaint()
 
             revalidate()
             repaint()
+
+            field.requestFocusInWindow()
         }
 
     constructor() : super("GameWindow") {
