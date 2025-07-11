@@ -158,7 +158,7 @@ class NonePanel : GamePanel {
                         gameTimeComboBox = JComboBox(gameTimeMap.keys.toTypedArray()).apply {
                             size = preferredSize
                             font = Main.serifFont.deriveFont(28f)
-                            selectedIndex = 0
+                            selectedIndex = 3
 
                             putClientProperty(
                                 FlatClientProperties.STYLE,
