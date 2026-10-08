@@ -28,6 +28,26 @@ data class GameResult(val words: Array<Word>) {
             return false
 
         val character = word.activeCharacter ?: return false
+
+        if (character.rule.keys.contentEquals(Key.N)) {
+            if (inputKey.length < 2 && key == "n") {
+                inputKey += key
+                character.selectedKeyIndex = character.rule.keys.indexOfFirst { it.length == inputKey.length }
+                character.completedInputIndex = inputKey.length
+                word.successInputCount++
+                return true
+            }
+
+            if (inputKey.isNotEmpty()) {
+                character.selectedKeyIndex = character.rule.keys.indexOfFirst { it.length == inputKey.length }
+                character.completedInputIndex = inputKey.length
+                word.activeCharacterIndex++
+                inputKey = ""
+                return tryInput(key)
+            }
+        }
+
+
         val characterKey = character.rule.keys.indexOfFirst { it.startsWith(inputKey + key) }
         if (characterKey < 0) {
             word.failedInputCount++
@@ -37,9 +57,9 @@ data class GameResult(val words: Array<Word>) {
         inputKey += key
         character.selectedKeyIndex = characterKey
         character.completedInputIndex++
+        word.successInputCount++
 
         if (character.completedInputIndex >= character.rule.keys[character.selectedKeyIndex].length) {
-            word.successInputCount++
             word.activeCharacterIndex++
             inputKey = ""
         }
@@ -60,9 +80,23 @@ data class GameResult(val words: Array<Word>) {
         if (word.activeCharacterIndex < word.characters.size)
             return false
 
+        if (activeWordIndex == words.lastIndex)
+            return false
+
         word.elapsedTime = System.currentTimeMillis() - word.elapsedTime
         activeWordIndex++
         inputKey = ""
+
+        return true
+    }
+
+    fun isCompleteWords(): Boolean {
+        if (activeWordIndex < words.lastIndex)
+            return false
+
+        val word = activeWord ?: return false
+        if (word.activeCharacterIndex < word.characters.size)
+            return false
 
         return true
     }

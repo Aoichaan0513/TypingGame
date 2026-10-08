@@ -87,9 +87,21 @@ data class Word(val name: String, val ruby: String, val rules: Array<KeyRule>) {
 
                     if (character == "ん") {
                         // 現在の文字が撥音の場合
+                        val consonantKeys = Key.CONSONANT_KEY_MAPPINGS.keys.flatMap { it.map { it } } + arrayOf(
+                            "ー",
+                            "-",
+                            "、",
+                            ",",
+                            "。",
+                            ".",
+                            "・",
+                            "/",
+                            " ",
+                            "　"
+                        )
                         list.add(
                             KeyRule(
-                                if (Key.CONSONANT_KEY_MAPPINGS.entries.any { it.key.contains(nextCharacter) }) Key.N else Key.NN,
+                                if (consonantKeys.contains(nextCharacter)) Key.N else Key.NN,
                                 nameLength,
                                 rubyLength
                             )
@@ -100,7 +112,7 @@ data class Word(val name: String, val ruby: String, val rules: Array<KeyRule>) {
                     // 現在の文字が撥音の場合
                     list.add(
                         KeyRule(
-                            Key.N,
+                            arrayOf("n"),
                             nameLength,
                             rubyLength
                         )

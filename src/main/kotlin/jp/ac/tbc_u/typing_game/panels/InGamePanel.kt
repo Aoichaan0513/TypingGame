@@ -1,6 +1,9 @@
 package jp.ac.tbc_u.typing_game.panels
 
-import jp.ac.tbc_u.typing_game.*
+import jp.ac.tbc_u.typing_game.GameManager
+import jp.ac.tbc_u.typing_game.GameManager.GameState
+import jp.ac.tbc_u.typing_game.GameWindow
+import jp.ac.tbc_u.typing_game.Main
 import kotlinx.coroutines.DelicateCoroutinesApi
 import java.awt.*
 import java.awt.event.ActionEvent
@@ -9,9 +12,6 @@ import java.awt.event.KeyListener
 import javax.swing.*
 
 class InGamePanel : GamePanel, KeyListener {
-
-    val words: Words
-    val result: GameResult
 
     private lateinit var inputCountLabel: JLabel
     private lateinit var gameTimeLabel: JLabel
@@ -23,14 +23,7 @@ class InGamePanel : GamePanel, KeyListener {
     private lateinit var completedKeyLabel: JLabel
     private lateinit var inCompletedKeyLabel: JLabel
 
-    constructor(window: GameWindow, words: Words) : super(window) {
-        this.words = words
-        result = GameResult.of(
-            words.words.let {
-                if (GameManager.isShuffled) it.toList().shuffled().toTypedArray() else it
-            }
-        )
-
+    constructor(window: GameWindow) : super(window) {
         layout = BorderLayout()
         add(headerPanel(), BorderLayout.NORTH)
         add(bodyPanel(), BorderLayout.CENTER)
@@ -47,21 +40,21 @@ class InGamePanel : GamePanel, KeyListener {
     }
 
     override fun update() {
-        inputCountLabel.text = "入力文字数：${result.totalInputCount}"
+        inputCountLabel.text = "入力文字数：${GameManager.result.totalInputCount}"
 
         val minute = (GameManager.gameTime / 60).toString().padStart(2, '0')
         val second = (GameManager.gameTime % 60).toString().padStart(2, '0')
         gameTimeLabel.text = "残り：$minute:$second"
 
-        val ruby = result.activeWord?.ruby
+        val ruby = GameManager.result.activeWord?.ruby
         completedRubyLabel.text = ruby?.first ?: ""
         inCompletedRubyLabel.text = ruby?.second ?: ""
 
-        val name = result.activeWord?.name
+        val name = GameManager.result.activeWord?.name
         completedNameLabel.text = name?.first ?: ""
         inCompletedNameLabel.text = name?.second ?: ""
 
-        val key = result.activeWord?.key
+        val key = GameManager.result.activeWord?.key
         completedKeyLabel.text = key?.first ?: ""
         inCompletedKeyLabel.text = key?.second ?: ""
     }
@@ -73,7 +66,7 @@ class InGamePanel : GamePanel, KeyListener {
         border = BorderFactory.createEmptyBorder(0, 12, 0, 0)
 
         add(
-            JLabel("タイピングゲーム ― ${words.name}", SwingConstants.CENTER).apply {
+            JLabel("タイピングゲーム ― ${GameManager.words.name}", SwingConstants.CENTER).apply {
                 size = preferredSize
                 font = Main.serifFont.deriveFont(36f)
                 foreground = Color.WHITE
@@ -238,7 +231,10 @@ class InGamePanel : GamePanel, KeyListener {
         if (Character.isISOControl(e.keyChar))
             return
 
+        val result = GameManager.result
+
         result.tryInput(e.keyChar.toString())
+        update()
 
         if (result.tryNextWord()) {
             remove(1)
@@ -248,9 +244,14 @@ class InGamePanel : GamePanel, KeyListener {
             add(bodyPanel(), BorderLayout.CENTER)
             repaint()
             revalidate()
+
+            update()
         }
 
-        update()
+        if (result.isCompleteWords()) {
+            GameManager.state = GameState.END
+            window.content = EndPanel(window)
+        }
     }
 
     override fun keyPressed(e: KeyEvent) {

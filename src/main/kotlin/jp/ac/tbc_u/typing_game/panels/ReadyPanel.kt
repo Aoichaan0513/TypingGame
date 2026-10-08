@@ -3,7 +3,6 @@ package jp.ac.tbc_u.typing_game.panels
 import jp.ac.tbc_u.typing_game.GameManager
 import jp.ac.tbc_u.typing_game.GameWindow
 import jp.ac.tbc_u.typing_game.Main
-import jp.ac.tbc_u.typing_game.Words
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
@@ -12,19 +11,13 @@ import javax.swing.*
 
 class ReadyPanel : GamePanel {
 
-    val words: Words
-
     lateinit var readyTimeLabel: JLabel
     lateinit var cancelButtonPanel: JPanel
 
-    constructor(window: GameWindow, words: Words) : super(window) {
-        this.words = words
-
+    constructor(window: GameWindow) : super(window) {
         layout = BorderLayout()
         add(headerPanel(), BorderLayout.NORTH)
         add(bodyPanel(), BorderLayout.CENTER)
-
-        GameManager.start()
     }
 
     override fun update() {
@@ -40,7 +33,7 @@ class ReadyPanel : GamePanel {
         border = BorderFactory.createEmptyBorder(0, 12, 0, 0)
 
         add(
-            JLabel("タイピングゲーム ― ${words.name}", SwingConstants.CENTER).apply {
+            JLabel("タイピングゲーム ― ${GameManager.words.name}", SwingConstants.CENTER).apply {
                 size = preferredSize
                 font = Main.serifFont.deriveFont(36f)
                 foreground = Color.WHITE
@@ -57,12 +50,12 @@ class ReadyPanel : GamePanel {
         for (i in 0 until layout.rows * layout.columns) {
             when (i) {
                 1 -> {
-                    readyTimeLabel = JLabel(if (GameManager.readyTime > 0) GameManager.readyTime.toString() else "スタート！").apply {
-                        size = preferredSize
-                        horizontalAlignment = SwingConstants.CENTER
-                        font = Main.serifFont.deriveFont(180f)
-                        foreground = Main.BRAND_COLOR
-                    }
+                    readyTimeLabel =
+                        JLabel(if (GameManager.readyTime > 0) GameManager.readyTime.toString() else "スタート！", SwingConstants.CENTER).apply {
+                            size = preferredSize
+                            font = Main.serifFont.deriveFont(180f)
+                            foreground = Main.BRAND_COLOR
+                        }
                     add(readyTimeLabel)
                 }
 

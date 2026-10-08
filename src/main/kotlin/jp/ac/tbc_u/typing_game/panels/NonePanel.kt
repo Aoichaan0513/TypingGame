@@ -96,11 +96,7 @@ class NonePanel : GamePanel {
                                 GameManager.isShuffled = wordOrderButton.isSelected
                                 GameManager.readyTime = readyTimeMap[readyTimeComboBox.selectedItem as String]!!
                                 GameManager.gameTime = gameTimeMap[gameTimeComboBox.selectedItem as String]!!
-
-                                window.content = ReadyPanel(
-                                    window,
-                                    WORD_MAPPING[categoryComboBox.selectedItem as String]!!
-                                )
+                                GameManager.start(WORD_MAPPING[categoryComboBox.selectedItem as String]!!)
                             }
                         }
                         add(startButton)

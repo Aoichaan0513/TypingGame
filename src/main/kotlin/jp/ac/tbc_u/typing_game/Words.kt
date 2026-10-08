@@ -494,5 +494,11 @@ val WORD_MAPPING = arrayOf(
         "にじさんじ (2020年～2025年)",
         WORDS_NIJISANJI_2020_MEMBER_NAMES.words + WORDS_NIJISANJI_2021_MEMBER_NAMES.words + WORDS_NIJISANJI_2022_MEMBER_NAMES.words + WORDS_NIJISANJI_2023_MEMBER_NAMES.words + WORDS_NIJISANJI_2024_MEMBER_NAMES.words + WORDS_NIJISANJI_2025_MEMBER_NAMES.words
     ),
-    WORDS_HOLOLIVE_MEMBER_NAMES
+    WORDS_HOLOLIVE_MEMBER_NAMES,
+    Words(
+        "デバッグ用",
+        arrayOf(
+            Word.of("群馬県", "ぐ{0}んまけ{0}ん")
+        )
+    )
 ).associateBy { it.name }
